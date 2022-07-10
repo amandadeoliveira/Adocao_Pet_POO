@@ -4,7 +4,7 @@ public class Animal_Gato extends Animal {
 	private String raca;
 	private String cor;
 	
-	public Animal_Gato(String nome, String sexo, String descricao, int idade) {
+	public Animal_Gato(String nome, String sexo, String descricao, String idade) {
 		super(nome, sexo, descricao, idade);
 	}
 

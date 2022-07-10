@@ -92,65 +92,123 @@ public class Aplication {
 		Scanner scan = new Scanner(System.in);
 		
 		while (!exit){
-			System.out.println("Olá, o que deseja cadastrar?\n" + "(1)Gato (2)Cachorro");
+			
+			System.out.println("caduser:   cadastrar usuário\n"
+							 + "anuncios:  listar animais cadastrados\n"
+							 + "cadpet:    cadastrar um pet\n"
+							 + "adote:     adotar um pet\n"
+							 + "sair:      encerrar o sistema");
 			String line = scan.nextLine();
 			
-			//Criando e Inserindo um Gato
-			if (line.equals("1")){
-				
-				System.out.println("Qual é o nome do gato?");
-				String cat_name = scan.nextLine();
-				
-				System.out.println("Qual é o sexo?");
-				String cat_sex = scan.nextLine();
-				
-				System.out.println("Uma breve descrição:");
-				String cat_desc = scan.nextLine();
-				
-				System.out.println("A idade do pet?");
-				int cat_age = Integer.parseInt(scan.nextLine());
-				Animal_Gato gato = new Animal_Gato(cat_name, cat_sex, cat_desc, cat_age);
-
-				System.out.println("O pet é castrado?\n"
-						+ "(1)Sim (2)Não");
-				String cat_castrated = scan.nextLine();
-				if (cat_castrated.equals("1")){
-					gato.setCastrado(true);
-				} else {
-					gato.setCastrado(false);
-				}
-				app.insertGato(gato);
-				
-				System.out.println(cat_name + " foi cadastrado(a)");
+			if (line.equals("sair")){
+				exit = true;
 			}
-			if (line.equals("2")){
+			if (line.equals("caduser")){
 				
-				System.out.println("Qual é o nome do cachorro?");
-				String dog_name = scan.nextLine();
-				
-				System.out.println("Qual é o sexo?");
-				String dog_sex = scan.nextLine();
-				
-				System.out.println("Uma breve descrição:");
-				String dog_desc = scan.nextLine();
-				
-				System.out.println("A idade do pet?");
-				int dog_age = Integer.parseInt(scan.nextLine());
-				Animal_Cachorro dog = new Animal_Cachorro(dog_name, dog_sex, dog_desc, dog_age);
-				
-				System.out.println("O pet é castrado?\n"
-						+ "(1)Sim (2)Não");
-				String dog_castrated = scan.nextLine();
-				
-				if (dog_castrated.equals("1")){
-					dog.setCastrado(true);
-				} else {
-					dog.setCastrado(false);
-				}
-				app.insertCachorro(dog);
-				
-				System.out.println(dog_name + " foi cadastrado(a)");
 			}
+			if (line.equals("anuncios")){
+				System.out.println("Você deseja ver (1) gatos ou (2) cachorros?");
+				line = scan.nextLine();
+				if (line.equals("1")){
+					List<Animal_Gato> locallist = app.getLista_Gatos();
+					for ( Animal_Gato  gatin : locallist){
+						System.out.println(gatin.getNome() + " " + gatin.getIdade() + " " + gatin.getRaca() + " " + gatin.getCastrado() + " \n" + gatin.getDescricao());
+					}
+				}
+				else if (line.equals("2")){
+					List<Animal_Cachorro> locallist = app.getLista_Cachorro();
+					for ( Animal_Cachorro dogin : locallist){
+						System.out.println(dogin.getNome() + " " + dogin.getIdade() + " " + dogin.getRaca() + " " + dogin.getCastrado() + " \n" + dogin.getDescricao());
+					}
+				}
+			}
+			if (line.equals("cadpet")){
+				System.out.println("Você deseja cadastrar um (1) gato ou (2) cachorro?");
+				line = scan.nextLine();
+				
+				if (line.equals("1")){
+					
+					System.out.println("Qual é o nome do gato?");
+					String cat_name = scan.nextLine();
+					
+					System.out.println("Qual é o sexo?");
+					String cat_sex = scan.nextLine();
+					
+					System.out.println("Uma breve descrição:");
+					String cat_desc = scan.nextLine();
+					
+					System.out.println("A idade do pet?");
+					String cat_age = scan.nextLine();
+					Animal_Gato gato = new Animal_Gato(cat_name, cat_sex, cat_desc, cat_age);
+					
+					System.out.println("Qual é o raça?");
+					String cat_raca = scan.nextLine();
+					gato.setRaca(cat_raca);
+					
+					System.out.println("O pet é castrado?\n"
+							+ "(1)Sim (2)Não");
+					String cat_castrated = scan.nextLine();
+					
+					if (cat_castrated.equals("1")){
+						gato.setCastrado(true);
+					} else {
+						gato.setCastrado(false);
+					}
+					app.insertGato(gato);
+					
+					System.out.println(cat_name + " foi cadastrado(a)");
+				}
+				if (line.equals("2")){
+					
+					System.out.println("Qual é o nome do cachorro?");
+					String dog_name = scan.nextLine();
+					
+					System.out.println("Qual é o sexo?");
+					String dog_sex = scan.nextLine();
+					
+					System.out.println("Uma breve descrição:");
+					String dog_desc = scan.nextLine();
+					
+					System.out.println("A idade do pet?");
+					String dog_age = scan.nextLine();
+					Animal_Cachorro dog = new Animal_Cachorro(dog_name, dog_sex, dog_desc, dog_age);
+					
+					System.out.println("Qual é o raça?");
+					String dog_raca = scan.nextLine();
+					dog.setRaca(dog_raca);
+					
+					System.out.println("O pet é castrado?\n"
+							+ "(1)Sim (2)Não");
+					String dog_castrated = scan.nextLine();
+					if (dog_castrated.equals("1")){
+						dog.setCastrado(true);
+					} else {
+						dog.setCastrado(false);
+					}
+					
+					app.insertCachorro(dog);
+					
+					System.out.println(dog_name + " foi cadastrado(a)");
+				}
+			}
+			if (line.equals("adote")){
+				
+			}
+			
+//			System.out.println("Olá, o que deseja cadastrar?\n" + "(1)Gato (2)Cachorro");
+//			String line = scan.nextLine();
+//			
+//			//Criando e Inserindo um Gato
+//			if (line.equals("1")){
+//				
+//				
+//			}
+			//Criando e Inserindo um Cachorro
+//			if (line.equals("2")){
+//				
+//				
+//			}
+			
 		}
 		scan.close();
 	}

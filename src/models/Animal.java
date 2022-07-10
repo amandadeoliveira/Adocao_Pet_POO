@@ -5,12 +5,12 @@ public class Animal {
     private String nome;
     private String sexo;
     private String descricao;
-    private int idade;
+    private String idade;
     private boolean castrado;
 
     
 
-    public Animal(String nome, String sexo, String descricao, int idade){
+    public Animal(String nome, String sexo, String descricao, String idade){
         this.nome = nome;
         this.sexo = sexo;
         this.descricao = descricao;
@@ -45,10 +45,10 @@ public class Animal {
         this.descricao = descricao;
     }
 
-    public int idade(){
+    public String getIdade(){
         return this.idade;
     }
-    public void setIdade(int idade){
+    public void setIdade(String idade){
         this.idade = idade;
     }
     
