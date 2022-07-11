@@ -1,24 +1,34 @@
 package models;
 
+import java.util.List;
+import java.util.UUID;
+
 public class Usuario {
-	private int id;
+	private UUID userid;
     private String nome;
     private String celular;
     private String email;
     private String senha;
-
+    private int pets_adotados;
+    private List<UUID> meus_gatos;
+    private List<UUID> meus_dogs;
+    
     public Usuario(String nome, String celular, String email, String senha){
+    	
         this.nome = nome;
         this.celular = celular;
         this.email = email;
         this.senha = senha;
+        
+        this.userid = UUID.randomUUID();
+
     }
     
-    public int getId(){
-    	return this.id;
+    public UUID getId(){
+    	return this.userid;
     }
-    public void setId(int id){
-    	this.id = id;
+    public void setId(UUID userid){
+    	this.userid = userid;
     }
     
     public String getNome(){
@@ -48,4 +58,35 @@ public class Usuario {
     public void setSenha(String senha){
         this.senha = senha;
     }
+    
+    public boolean adoteCat(UUID catId){
+    	if (this.pets_adotados < 2) {
+    		this.meus_gatos.add(catId);
+    		this.pets_adotados++;
+    		return true;
+    	}else {
+    		return false;
+    	}
+    }
+    public boolean adoteDog(UUID dogId){
+    	if (this.pets_adotados < 2) {
+    		this.meus_gatos.add(dogId);
+    		this.pets_adotados++;
+    		return true;
+    	}else {
+    		return false;
+    	}
+    }
+    
+    public int getPetAdotados(){
+    	return this.pets_adotados;
+    }
+    
+    
+	public String toString(){
+		return "Usuario [userid=" + userid + ", nome=" + nome + ", celular=" + celular + ", email=" + email + ", senha="
+				+ senha + ", pets_adotados=" + pets_adotados + ", meus_gatos=" + meus_gatos + ", meus_dogs=" + meus_dogs
+				+ "]";
+	}
+    
 }

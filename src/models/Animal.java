@@ -1,12 +1,15 @@
 package models;
 
+import java.util.UUID;
+
 public class Animal {
-	private int id;
+	private UUID animid;
     private String nome;
     private String sexo;
     private String descricao;
     private String idade;
     private boolean castrado;
+    
 
     
 
@@ -15,13 +18,15 @@ public class Animal {
         this.sexo = sexo;
         this.descricao = descricao;
         this.idade = idade;
+        
+        this.animid = UUID.randomUUID();
     }
     
-    public int getId(){
-    	return this.id;
+    public UUID getId(){
+    	return this.animid;
     }
-    public void setId(int id){
-    	this.id = id;
+    public void setId(UUID animid){
+    	this.animid = animid;
     }
     
     public String getNome(){
