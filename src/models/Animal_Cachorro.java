@@ -1,6 +1,9 @@
 package models;
 
-public class Animal_Cachorro extends Animal {
+import java.io.Serializable;
+
+public class Animal_Cachorro extends Animal implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String raca;
 	private String cor;
 	

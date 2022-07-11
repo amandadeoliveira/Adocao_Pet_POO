@@ -1,9 +1,11 @@
 package models;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-public class Usuario {
+public class Usuario implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private UUID userid;
     private String nome;
     private String celular;

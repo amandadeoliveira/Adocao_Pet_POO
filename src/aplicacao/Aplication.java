@@ -1,15 +1,17 @@
 package aplicacao;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+
 
 
 import models.Animal_Cachorro;
@@ -36,76 +38,76 @@ public class Aplication {
 
 	public void saveDatabase(){
 		
-//		try{
-			
-//			Gson gson = new Gson();
-//			JsonParser parser = new JsonParser();
-//			
-//			JsonArray arrayUser = parser.parse( this.Lista_Usuario.get(0).toString() ).getAsJsonArray(); 
-			
-//			Path output = Paths.get("userDB.txt");
-//			String internUser = "";
-//			
-//			for (Usuario user : this.Lista_Usuario){
-//				internUser.concat(  user.toString() + ";");
-//			}
-//			byte[] users = internUser.getBytes( StandardCharsets.UTF_8 );
-//			Files.write(output, users, StandardOpenOption.WRITE);
-			
-//			ByteArrayOutputStream array_de_users = new ByteArrayOutputStream();
-//			DataOutputStream out = new DataOutputStream(array_de_users);
-//			for (Usuario user : this.Lista_Usuario){
-//				out.writeUTF(user.toString());
-//			}
-//			
-//			out.w
-//			byte[] users = out.get
-//			Files.write(output, data);
-//			FileOutputStream fos = new FileOutputStream("userDB.txt");
-//	        ObjectOutputStream oos = new ObjectOutputStream(fos);
-//	        var data = this.Lista_Usuario;
-//	        oos.writeObject(data);
-//	        oos.close();        
-
-//	    }
-//		catch (IOException e) {
-//	        e.printStackTrace();
-//		}
+		try{
+			FileOutputStream fos = new FileOutputStream("userDB");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject( this.Lista_Usuario );
+			oos.close();
+			fos.close();
+		}
+		
+		catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		
+		try{
+			FileOutputStream fos = new FileOutputStream("gatosDB");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(this.Lista_Gatos);
+			oos.close();
+			fos.close();
+		}
+		
+		catch (IOException ama) {
+			ama.printStackTrace();
+		}
+		
+		try{
+			FileOutputStream fos = new FileOutputStream("dogsDB");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(this.Lista_Cachorro);
+			oos.close();
+			fos.close();
+		}
+		
+		catch (IOException nda){
+			nda.printStackTrace();
+		}
+		
+		try{
+			FileOutputStream fos = new FileOutputStream("anunciosDB");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(this.Lista_Anuncio);
+			oos.close();
+			fos.close();
+		}
+		
+		catch (IOException pei){
+			pei.printStackTrace();
+		}
+		
+		
 	}
 	
+	
+	@SuppressWarnings("unchecked")
 	public void loadDatabase(){
 		
 		try {
-			Path input = Paths.get("userDB.txt" );
-			byte [] users = Files.readAllBytes(input);
-			String allUsers = "";
-			System.out.println( allUsers );
+			FileInputStream finputStream = new FileInputStream("userDB");
+			ObjectInputStream oinputStream = new ObjectInputStream( finputStream );
 			
-			allUsers = users.toString();
-			System.out.println( allUsers );
 			
-//			FileInputStream fis = 
-			
+			Lista_Usuario =  ( ArrayList<Usuario> ) oinputStream.readObject();
+			oinputStream.close();
+			finputStream.close();
 			
 		} catch ( IOException e ) {
 			System.out.println("loadDatabase error: "+  e.getMessage());
+		} catch (ClassNotFoundException c) {
+			System.out.println("loadDatabase error: "+  c.getMessage());
 		}
 
-//		try {           
-//		        FileInputStream fis = new FileInputStream("userDB.txt");
-//		        ObjectInputStream ois = new ObjectInputStream(fis);         
-//		        data = (ArrayList<User>)ois.readObject();
-//		        ois.close();            
-//		    }       
-//		catch (IOException e){
-//		        System.out.println("***catch ERROR***");
-//		        e.printStackTrace();
-//
-//		    }       
-//		catch (ClassNotFoundException e){
-//		        System.out.println("***catch ERROR***");
-//		        e.printStackTrace();
-//		    }   
 	}
 
 	public void setLista_Gatos(List<Animal_Gato> lista_Gatos){
@@ -168,7 +170,7 @@ public class Aplication {
 	public static void main(String[] args){
 		
 		Aplication app = new Aplication();
-//		app.loadDatabase();
+		app.loadDatabase();
 		boolean exit = false;
 		
 		
@@ -188,8 +190,6 @@ public class Aplication {
 			if (line.equals("sair")){
 				exit = true;
 			}
-			
-			
 			if( line.equals("cadanunc") ) {
 				System.out.println("Vamos fazer o anuncio de um pet:\n Esse pet, é um (1) Gatinho ou (2)Doguinho?\n");
 				String choice = scan.nextLine();
@@ -220,7 +220,8 @@ public class Aplication {
 										Anuncio tempAnuncio = new Anuncio(cidade, estado, date_post, user );
 										tempAnuncio.setAnimalGato(gato);
 										app.insertAnuncio( tempAnuncio );
-										
+										app.saveDatabase();
+										System.out.println("------------");
 										
 									}else {
 										choice = "";
@@ -262,6 +263,8 @@ public class Aplication {
 										tempAnuncio.setAnimalCachorro(dogin);
 										
 										app.insertAnuncio( tempAnuncio );
+										app.saveDatabase();
+										System.out.println("------------");
 										
 									}else {
 										choice = "";
@@ -286,26 +289,21 @@ public class Aplication {
 				if (app.getLista_Anuncio().size() == 0){
 					System.out.println("Não existem animais para adoção");
 				}else{
+					List<Anuncio> templist = new ArrayList<Anuncio>();
 					for (Anuncio tempAnuncio : app.getLista_Anuncio() ){
-						String cidade = tempAnuncio.getCidade();
-						String estado = tempAnuncio.getEstado();
-						String data = tempAnuncio.getDataPost();
-						String animal_nome = "";
-						String autor_nome = tempAnuncio.getAutor();
-						
-						if( ! (tempAnuncio.getAnimalCachorro() == null) ) {
-							 animal_nome = tempAnuncio.getAnimalCachorro().getNome();
+						if (tempAnuncio.getDisponivel() == true){
+							templist.add(tempAnuncio);							
 						}
-						if( !(tempAnuncio.getAnimalGato() == null) ) {
-							 animal_nome = tempAnuncio.getAnimalGato().getNome();
+					}
+					if (templist.size() == 0) {
+						System.out.println("Não existem animais para adoção");
+					}else {
+						for (Anuncio nda : templist) {
+							System.out.println(nda.toString() + "\n");
 						}
-						System.out.println( "-- " + animal_nome +    "\n" +
-											cidade + " - " + estado + " :: " + data + " :: Author: " + autor_nome + "\n------------");
 					}
 				}
 			}
-			
-			
 			if (line.equals("caduser")){
 				System.out.println("Qual é o seu nome?");
 				String user_name = scan.nextLine();
@@ -321,11 +319,10 @@ public class Aplication {
 				
 				Usuario user = new Usuario(user_name, user_number, user_email, user_pass);
 				app.insertUsuario(user);
+				app.saveDatabase();
 				
-				System.out.println(user_name + " cadastrado(a) com sucesso");
+				System.out.println(user_name + " cadastrado(a) com sucesso\n------------");
 			}
-			
-			
 			if (line.equals("readpets")){
 				System.out.println("Você deseja ver (1) gatos ou (2) cachorros?");
 				line = scan.nextLine();
@@ -341,10 +338,9 @@ public class Aplication {
 					for ( Animal_Cachorro dogin : locallist){
 						System.out.println(dogin.getNome() + " " + dogin.getIdade() + " " + dogin.getRaca() + " " + dogin.getCastrado() + " \n" + dogin.getDescricao());
 					}
+					System.out.println("------------");
 				}
 			}
-			
-			
 			if (line.equals("cadpet")){
 				System.out.println("Você deseja cadastrar um (1) gato ou (2) cachorro?");
 				line = scan.nextLine();
@@ -378,8 +374,8 @@ public class Aplication {
 						gato.setCastrado(false);
 					}
 					app.insertGato(gato);
-					
-					System.out.println(cat_name + " foi cadastrado(a)");
+					app.saveDatabase();					
+					System.out.println(cat_name + " foi cadastrado(a)\n------------");
 				}
 				if (line.equals("2")){
 					
@@ -408,14 +404,11 @@ public class Aplication {
 					} else {
 						dog.setCastrado(false);
 					}
-					
 					app.insertCachorro(dog);
-					
-					System.out.println(dog_name + " foi cadastrado(a)");
+					app.saveDatabase();
+					System.out.println(dog_name + " foi cadastrado(a)\n------------");
 				}
 			}
-			
-			
 			if (line.equals("adote")){
 				System.out.println("Qual o nome do pet que você deseja adotar?");
 				String pet_name = scan.nextLine();
@@ -433,9 +426,10 @@ public class Aplication {
 							for( Usuario user : app.getLista_Usuario()){
 								if (user.getNome().toLowerCase().equals(tempname)){
 									if (user.adoteCat(gato.getId()) == true ){
-										System.out.println("Gatin adotado");
+										app.saveDatabase();
+										System.out.println("Gatin adotado\n------------");
 									}else {
-										System.out.println("não rolou");
+										System.out.println("não rolou\n------------");
 									}
 								}
 							}
@@ -456,19 +450,22 @@ public class Aplication {
 							for( Usuario user : app.getLista_Usuario()){
 								if (user.getNome().toLowerCase().equals(tempname)){
 									if (user.adoteDog(dogin.getId()) == true  ){
-										System.out.println("Dogin adotado");
+										app.saveDatabase();
+										System.out.println("Dogin adotado\n------------");
 									}else {
-										System.out.println("não rolou");
+										System.out.println("não rolou\n------------");
 									}
 									
 								}
 							}
 						}
 						if (line.equals("2")){
-							line = "";
+							line = "adote";
 						}
 					}
 				}
+				
+				
 				
 			}
 			

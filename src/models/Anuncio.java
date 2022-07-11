@@ -1,18 +1,23 @@
 package models;
 
-public class Anuncio {
+import java.io.Serializable;
+
+public class Anuncio implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String cidade;
 	private String estado;
 	private String data_post;
 	private Animal_Gato petGato;
 	private Animal_Cachorro petCachorro;
 	private Usuario user;
+	private boolean disponivel;
 	
 	public Anuncio(String cidade, String estado, String data_post, Usuario autor){
 	        this.cidade = cidade;
 	        this.estado = estado;
 	        this.data_post = data_post;
 	        this.user = autor;
+	        this.disponivel = true;
 	}
 	
 	public String getCidade(){
@@ -52,4 +57,12 @@ public class Anuncio {
     	this.petGato = null;
     	this.petCachorro = cachorro;
     }
+
+	public boolean getDisponivel() {
+		return disponivel;
+	}
+
+	public void setDisponivel(boolean disponivel) {
+		this.disponivel = disponivel;
+	}
 }
