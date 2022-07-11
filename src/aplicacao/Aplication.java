@@ -1,24 +1,16 @@
 package aplicacao;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
 
 import models.Animal_Cachorro;
 import models.Animal_Gato;
@@ -196,17 +188,50 @@ public class Aplication {
 			if (line.equals("sair")){
 				exit = true;
 			}
+			
+			
 			if( line.equals("cadanunc") ) {
 				System.out.println("Vamos fazer o anuncio de um pet:\n Esse pet, é um (1) Gatinho ou (2)Doguinho?\n");
 				String choice = scan.nextLine();
 				if( choice.equals("1") ) {
+					choice = "";
 					System.out.println("O gatinho já deve estar cadastrado no sistema. Qual o nome dele?");
 					String pet = scan.nextLine();
 						   pet = pet.toLowerCase();
 					for( Animal_Gato gato : app.getLista_Gatos() ) {
 						if ( gato.getNome().toLowerCase().equals(pet) ) {
 							
-							
+							System.out.println("Vamos identifica-lo usuario. Me diga qual seu nome:");
+							String tname = scan.nextLine();
+							tname = tname.toLowerCase();
+							for ( Usuario user : app.getLista_Usuario() ) {
+								if( user.getNome().toLowerCase().equals(tname) ) {
+									System.out.println("te encontrei :)\nCriar o anuncio de " + gato.getNome() + "? (1)sim (2)não ");
+									choice = scan.nextLine();
+									if ( choice.equals("1") ) {
+										System.out.println("Me diga em que estado " + gato.getNome() + " está:");
+										String estado = scan.nextLine();
+										System.out.println("Me diga em que cidade " + gato.getNome() + " está:");
+										String cidade = scan.nextLine();
+										DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+										Date date = new Date();
+										String date_post = dateFormat.format(date);
+										
+										Anuncio tempAnuncio = new Anuncio(cidade, estado, date_post, user );
+										tempAnuncio.setAnimalGato(gato);
+										app.insertAnuncio( tempAnuncio );
+										
+										
+									}else {
+										choice = "";
+										System.out.println("tudo bem, " + gato.getNome() + " ainda não foi cadastrada para adoção");
+									}
+									
+									
+								}else {
+									System.out.println("Sinto muito, para cadastrar um anuncio, você precisa estar cadastrado;");
+								}
+							}
 						}else {
 							System.out.println("Gatinho não encontrado :( \n");
 						}
@@ -217,8 +242,37 @@ public class Aplication {
 					 	   pet = pet.toLowerCase();
 					for( Animal_Cachorro dogin : app.getLista_Cachorro() ) {
 						if ( dogin.getNome().toLowerCase().equals(pet) ) {
-							
-							
+							System.out.println("Vamos identifica-lo usuario. Me diga qual seu nome:");
+							String tname = scan.nextLine();
+							tname = tname.toLowerCase();
+							for ( Usuario user : app.getLista_Usuario() ) {
+								if( user.getNome().toLowerCase().equals(tname) ) {
+									System.out.println("te encontrei :)\nCriar o anuncio de " + dogin.getNome() + "? (1)sim (2)não ");
+									choice = scan.nextLine();
+									if ( choice.equals("1") ) {
+										System.out.println("Me diga em que estado " + dogin.getNome() + " está:");
+										String estado = scan.nextLine();
+										System.out.println("Me diga em que cidade " + dogin.getNome() + " está:");
+										String cidade = scan.nextLine();
+										DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+										Date date = new Date();
+										String date_post = dateFormat.format(date);
+										
+										Anuncio tempAnuncio = new Anuncio(cidade, estado, date_post, user );
+										tempAnuncio.setAnimalCachorro(dogin);
+										
+										app.insertAnuncio( tempAnuncio );
+										
+									}else {
+										choice = "";
+										System.out.println("tudo bem, " + dogin.getNome() + " ainda não foi cadastrada para adoção");
+									}
+									
+									
+								}else {
+									System.out.println("Sinto muito, para cadastrar um anuncio, você precisa estar cadastrado;");
+								}
+							}
 						}else {
 							System.out.println("Doguinho não encontrado :( \n");
 						}
@@ -226,15 +280,32 @@ public class Aplication {
 				}
 				
 			}
+			
+			
 			if (line.equals("read")){
 				if (app.getLista_Anuncio().size() == 0){
 					System.out.println("Não existem animais para adoção");
 				}else{
 					for (Anuncio tempAnuncio : app.getLista_Anuncio() ){
-						System.out.println(tempAnuncio.toString() + "\n");
+						String cidade = tempAnuncio.getCidade();
+						String estado = tempAnuncio.getEstado();
+						String data = tempAnuncio.getDataPost();
+						String animal_nome = "";
+						String autor_nome = tempAnuncio.getAutor();
+						
+						if( ! (tempAnuncio.getAnimalCachorro() == null) ) {
+							 animal_nome = tempAnuncio.getAnimalCachorro().getNome();
+						}
+						if( !(tempAnuncio.getAnimalGato() == null) ) {
+							 animal_nome = tempAnuncio.getAnimalGato().getNome();
+						}
+						System.out.println( "-- " + animal_nome +    "\n" +
+											cidade + " - " + estado + " :: " + data + " :: Author: " + autor_nome + "\n------------");
 					}
 				}
 			}
+			
+			
 			if (line.equals("caduser")){
 				System.out.println("Qual é o seu nome?");
 				String user_name = scan.nextLine();
@@ -253,6 +324,8 @@ public class Aplication {
 				
 				System.out.println(user_name + " cadastrado(a) com sucesso");
 			}
+			
+			
 			if (line.equals("readpets")){
 				System.out.println("Você deseja ver (1) gatos ou (2) cachorros?");
 				line = scan.nextLine();
@@ -270,6 +343,8 @@ public class Aplication {
 					}
 				}
 			}
+			
+			
 			if (line.equals("cadpet")){
 				System.out.println("Você deseja cadastrar um (1) gato ou (2) cachorro?");
 				line = scan.nextLine();
@@ -339,6 +414,8 @@ public class Aplication {
 					System.out.println(dog_name + " foi cadastrado(a)");
 				}
 			}
+			
+			
 			if (line.equals("adote")){
 				System.out.println("Qual o nome do pet que você deseja adotar?");
 				String pet_name = scan.nextLine();
@@ -388,12 +465,10 @@ public class Aplication {
 							}
 						}
 						if (line.equals("2")){
-							line = "adote";
+							line = "";
 						}
 					}
 				}
-				
-				
 				
 			}
 			
