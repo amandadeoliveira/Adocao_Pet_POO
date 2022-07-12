@@ -1,8 +1,10 @@
 package models;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Animal {
+public class Animal implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private UUID animid;
     private String nome;
     private String sexo;
@@ -22,7 +24,10 @@ public class Animal {
         this.animid = UUID.randomUUID();
     }
     
-    public UUID getId(){
+    public Animal() {
+	}
+
+	public UUID getId(){
     	return this.animid;
     }
     public void setId(UUID animid){

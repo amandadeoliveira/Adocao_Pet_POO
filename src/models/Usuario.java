@@ -1,6 +1,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,10 +24,16 @@ public class Usuario implements Serializable{
         this.senha = senha;
         
         this.userid = UUID.randomUUID();
-
+        
+        this.meus_dogs = new ArrayList<UUID>();
+        this.meus_gatos = new ArrayList<UUID>();
+        this.pets_adotados = 0;
     }
     
-    public UUID getId(){
+    public Usuario() {
+	}
+
+	public UUID getId(){
     	return this.userid;
     }
     public void setId(UUID userid){
@@ -61,26 +68,26 @@ public class Usuario implements Serializable{
         this.senha = senha;
     }
     
-    public boolean adoteCat(UUID catId){
-    	if (this.pets_adotados < 2) {
-    		this.meus_gatos.add(catId);
-    		this.pets_adotados++;
+    public boolean adoteCat( UUID catId ){
+    	if ( pets_adotados < 2) {
+    		meus_gatos.add(catId);
+    		pets_adotados++;
     		return true;
     	}else {
     		return false;
     	}
     }
-    public boolean adoteDog(UUID dogId){
-    	if (this.pets_adotados < 2) {
-    		this.meus_gatos.add(dogId);
-    		this.pets_adotados++;
+    public boolean adoteDog( UUID dogId ){
+    	if ( pets_adotados < 2) {
+    		 meus_dogs.add( dogId );
+    		 pets_adotados++;
     		return true;
     	}else {
     		return false;
     	}
     }
     
-    public int getPetAdotados(){
+    public int getQtdPetAdotados(){
     	return this.pets_adotados;
     }
     

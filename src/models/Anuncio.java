@@ -18,6 +18,9 @@ public class Anuncio implements Serializable {
 	        this.data_post = data_post;
 	        this.user = autor;
 	        this.disponivel = true;
+	        
+	        this.petCachorro = new Animal_Cachorro();
+	        this.petGato 	 = new Animal_Gato();
 	}
 	
 	public String getCidade(){
@@ -62,7 +65,48 @@ public class Anuncio implements Serializable {
 		return disponivel;
 	}
 
-	public void setDisponivel(boolean disponivel) {
-		this.disponivel = disponivel;
+	public void setDisponivel(boolean value) {
+		this.disponivel = value;
 	}
+
+	@Override
+	public String toString() {
+		String petString = "";
+		String petDescrp = "";
+		if (petGato == null && !(petCachorro == null) ) {
+			String tempName  = this.petCachorro.getNome();
+			String tempIdade = this.petCachorro.getIdade();
+			String animCast = "LoL"; 
+			
+			if ( this.petCachorro.getCastrado() ) {
+			animCast = "É castrado";
+			} else {
+				animCast = "Não é castrado";
+			}
+			petString = tempName + " // " + tempIdade + " // " + animCast;
+			petDescrp = this.petCachorro.getDescricao();
+		}
+		else if (petCachorro == null) {
+			String tempName  = this.petGato.getNome();
+			String tempIdade = this.petGato.getIdade();
+			String animCast = "LoL"; 
+			
+			if ( this.petGato.getCastrado() ) {
+				animCast = "É castrado";
+				} else {
+					animCast = "Não é castrado";
+				}
+				petString = tempName + " // " + tempIdade + " // " + animCast;
+				petDescrp = this.petGato.getDescricao();
+		}
+		
+		String response = petString + "\n" + petDescrp + "\n" + "Author: " + user.getNome() + " // " + user.getCelular() + "\n" + cidade + " - " + estado + " // " + "DATA do CAD: " + data_post;
+		
+		return response;
+//		return "Anuncio cidade=" + cidade + ", estado=" + estado + ", data_post=" + data_post + ", user=" + user.getNome() + ", disponivel=" + disponivel  + petString;
+		
+		
+		
+	}
+	
 }
